@@ -77,10 +77,22 @@ def extraer_texto(datos):
         raise RuntimeError("La respuesta no recibe el formato esperado o no contiene datos.")
 
 # Función principal
-def obtener_dato_de_prueba(pregunta): #confirma la conexión con la API de Gemini y genera contenido basado en la pregunta proporcionada
+def obtener_dato_de_prueba(pregunta): #Es el orquestador, confirma la conexión con la API de Gemini y genera contenido basado en la pregunta proporcionada
     url, body = armar_peticion(pregunta)
     datos = enviar_peticion(url, body)
+    costo=calcular_costo(datos, 0.00000075, 0.00000375) #precio de entrada y salida en dólares
+    print(f"Costo de la operación: ${costo:.6f} USD")
     return extraer_texto(datos)
+
+#def calcular_costo(datos:dict, precio_entrada:float, precio_salida:float) -> float
+def calcular_costo(datos, precio_entrada, precio_salida):
+    #datos=datos["candidates"][0]["metadata"]["tokenUsage"]
+    uso=datos["usageMetadata"]
+    tokens_entrada = uso["promptTokenCount"]
+    tokens_salida = uso["candidatesTokenCount"]
+    tokens_razonamiento = uso["thoughtsTokenCount"] #revisar si existe o no, si no existe, asignar 0
+    costo=(tokens_entrada*precio_entrada)+((tokens_salida+tokens_razonamiento)*precio_salida)
+    return costo
 
 try:
     print(obtener_dato_de_prueba("Confirma en una frase corta que esta conexión funciona"))
