@@ -44,10 +44,10 @@ URL_BASE = "https://generativelanguage.googleapis.com/v1beta/models/"
 API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Función para crear la solicitud
-def armar_peticion(pregunta): #confirma la conexión con la API de Gemini y genera contenido basado en la pregunta proporcionada
+def armar_peticion(pregunta, modelo = MODELO): #confirma la conexión con la API de Gemini y genera contenido basado en la pregunta proporcionada
     if not pregunta:
         raise ValueError("La pregunta no puede estar vacía.")
-    url = f"{URL_BASE}{MODELO}:generateContent?key={API_KEY}"
+    url = f"{URL_BASE}{modelo}:generateContent?key={API_KEY}"
 
     body = {"contents":[{"parts": [{"text": pregunta}]}]}
     return url, body
@@ -56,11 +56,11 @@ def armar_peticion(pregunta): #confirma la conexión con la API de Gemini y gene
 def enviar_peticion(url, body):
     try:
         respuesta = requests.post(url, json=body, timeout=30)  # Establece un tiempo de espera de 30 segundos
+    except requests.exceptions.Timeout:
+            raise RuntimeError("La solicitud a la API de Gemini ha excedido el tiempo de espera.")
     except requests.exceptions.RequestException:
         raise RuntimeError("Error al enviar la solicitud a la API de Gemini.")
-    except requests.exceptions.Timeout:
-        raise RuntimeError("La solicitud a la API de Gemini ha excedido el tiempo de espera.")
-
+    
     if respuesta.status_code != 200:
         raise RuntimeError(f"Error en la respuesta. Status Code: {respuesta.status_code}")
 
@@ -90,11 +90,12 @@ def calcular_costo(datos, precio_entrada, precio_salida):
     uso=datos["usageMetadata"]
     tokens_entrada = uso["promptTokenCount"]
     tokens_salida = uso["candidatesTokenCount"]
-    tokens_razonamiento = uso["thoughtsTokenCount"] #revisar si existe o no, si no existe, asignar 0
+    tokens_razonamiento = uso.get("thoughtsTokenCount", 0) #revisar si existe o no, si no existe, asignar 0
     costo=(tokens_entrada*precio_entrada)+((tokens_salida+tokens_razonamiento)*precio_salida)
     return costo
 
-try:
-    print(obtener_dato_de_prueba("Confirma en una frase corta que esta conexión funciona"))
-except (ValueError, RuntimeError) as error:
-    print(f"No se pudo completar la operación: {error}")
+if __name__ == "__main__":
+    try:
+        print(obtener_dato_de_prueba("Confirma en una frase corta que esta conexión funciona"))
+    except (ValueError, RuntimeError) as error:
+        print(f"No se pudo completar la operación: {error}")
