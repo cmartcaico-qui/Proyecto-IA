@@ -36,20 +36,34 @@ import os
 import requests
 from dotenv import load_dotenv
 
+import time
+
+import json
+import re
+
 load_dotenv()
 
 # Constantes
-MODELO = "gemini-3.6-flash"
+# Modelo por defecto de ProjectPulse
+MODELO = "gemini-3.1-flash-lite"
 URL_BASE = "https://generativelanguage.googleapis.com/v1beta/models/"
 API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Función para crear la solicitud
-def armar_peticion(pregunta, modelo = MODELO): #confirma la conexión con la API de Gemini y genera contenido basado en la pregunta proporcionada
+def armar_peticion(pregunta, modelo=MODELO, system_instruction=None, response_schema=None):  #obtiene url y body
     if not pregunta:
         raise ValueError("La pregunta no puede estar vacía.")
+
     url = f"{URL_BASE}{modelo}:generateContent?key={API_KEY}"
 
-    body = {"contents":[{"parts": [{"text": pregunta}]}]}
+    body = {"contents": [{"parts": [{"text": pregunta}]}]}
+
+    if system_instruction is not None:
+        body["systemInstruction"] = {"parts": [{"text": system_instruction}]}
+
+    if response_schema is not None:
+        body["generationConfig"] = {"responseMimeType": "application/json", "responseSchema": response_schema}
+
     return url, body
 
 # Función que envía la petición
@@ -62,7 +76,10 @@ def enviar_peticion(url, body):
         raise RuntimeError("Error al enviar la solicitud a la API de Gemini.")
     
     if respuesta.status_code != 200:
-        raise RuntimeError(f"Error en la respuesta. Status Code: {respuesta.status_code}")
+     raise RuntimeError(
+        f"Error en la respuesta. Status Code: {respuesta.status_code}. "
+        f"Detalle: {respuesta.text}"
+    )
 
     try:
         return respuesta.json()
@@ -76,13 +93,117 @@ def extraer_texto(datos):
     except (KeyError, IndexError):
         raise RuntimeError("La respuesta no recibe el formato esperado o no contiene datos.")
 
+def parsear_respuesta_json(texto, claves_requeridas=None):
+
+    #claves_requeridas = ["categoria", "nivel"]
+
+    texto_limpio = texto.strip()
+
+    texto_limpio = re.sub(r"^```(?:json)?\s*", "", texto_limpio)
+    texto_limpio = re.sub(r"\s*```$", "", texto_limpio)
+
+    try:
+        datos = json.loads(texto_limpio)
+    except json.JSONDecodeError:
+        raise ValueError("La respuesta del modelo no es JSON válido.")
+
+    if claves_requeridas:
+        faltantes = [
+            clave
+            for clave in claves_requeridas
+            if clave not in datos
+        ]
+
+        if faltantes:
+            raise ValueError(
+                f"La respuesta no tiene la estructura esperada. "
+                f"Faltan las claves: {faltantes}"
+            )
+
+    return datos
+
 # Función principal
 def obtener_dato_de_prueba(pregunta): #Es el orquestador, confirma la conexión con la API de Gemini y genera contenido basado en la pregunta proporcionada
-    url, body = armar_peticion(pregunta)
+   
+    response_schema = {
+    "type": "OBJECT",
+    "properties": {
+        "compromisos": {
+            "type": "ARRAY",
+            "items": {
+                "type": "OBJECT",
+                "properties": {
+                    "responsable": {"type": "STRING"},
+                    "accion": {"type": "STRING"},
+                    "fecha": {"type": "STRING"}
+                },
+                "required": ["responsable", "accion", "fecha"]
+            }
+        },
+        "alertas": {
+            "type": "ARRAY",
+            "items": {
+                "type": "OBJECT",
+                "properties": {
+                    "tipo": {"type": "STRING"},
+                    "detalle": {"type": "STRING"},
+                    "nivel": {"type": "STRING"}
+                },
+                "required": ["tipo", "detalle", "nivel"]
+            }
+        },
+        "pendientes": {
+            "type": "ARRAY",
+            "items": {
+                "type": "STRING"
+            }
+        },
+        "estado": {
+            "type": "STRING"
+        },
+        "sugerencias": {
+            "type": "ARRAY",
+            "items": {
+                "type": "STRING"
+            }
+        }
+    },
+    "required": [
+        "compromisos",
+        "alertas",
+        "pendientes",
+        "estado",
+        "sugerencias"
+    ]
+}
+   
+    system_instruction = (
+    "Eres ProjectPulse, un asistente especializado en seguimiento de proyectos. "
+    "Analiza únicamente la información entregada. "
+    "Identifica compromisos, alertas, responsables, fechas y estado del proyecto. "
+    "No inventes información que no aparezca en el texto. "
+    "No afirmes que realizaste acciones, configuraste recordatorios o contactaste personas. "
+    "Si sugieres una acción, debes identificarla claramente como una sugerencia."
+)
+
+    url, body = armar_peticion(pregunta, system_instruction = system_instruction, response_schema = response_schema)
     datos = enviar_peticion(url, body)
-    costo=calcular_costo(datos, 0.00000075, 0.00000375) #precio de entrada y salida en dólares
+    costo=calcular_costo(datos, 0.00000025, 0.00000150) #precio de entrada y salida en dólares
     print(f"Costo de la operación: ${costo:.6f} USD")
-    return extraer_texto(datos)
+    texto = extraer_texto(datos)
+
+    datos_formateados = parsear_respuesta_json(
+        texto,
+        [
+            "compromisos",
+            "alertas",
+            "pendientes",
+            "estado",
+            "sugerencias"
+        ]
+    )
+
+    return datos_formateados
 
 #def calcular_costo(datos:dict, precio_entrada:float, precio_salida:float) -> float
 def calcular_costo(datos, precio_entrada, precio_salida):
@@ -96,6 +217,10 @@ def calcular_costo(datos, precio_entrada, precio_salida):
 
 if __name__ == "__main__":
     try:
-        print(obtener_dato_de_prueba("Confirma en una frase corta que esta conexión funciona"))
+        print(obtener_dato_de_prueba("""
+El informe debe entregarse el viernes.
+Carolina enviará los datos pendientes el miércoles.
+Existe riesgo de retraso porque falta validar la información con el cliente.
+"""))
     except (ValueError, RuntimeError) as error:
         print(f"No se pudo completar la operación: {error}")

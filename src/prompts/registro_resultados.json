@@ -1,0 +1,14 @@
+{
+  "extraer_compromisos": {
+    "exitos": 3,
+    "intentos": 3
+  },
+  "detectar_alertas": {
+    "exitos": 3,
+    "intentos": 3
+  },
+  "generar_estado_proyecto": {
+    "exitos": 3,
+    "intentos": 3
+  }
+}
