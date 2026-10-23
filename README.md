@@ -103,8 +103,6 @@ También se detectó que `.env.example` utilizaba `API_KEY`, mientras que el có
 
 Ambos puntos fueron corregidos antes de repetir el ensayo de instalación limpia.
 
-## Registro del ensayo de instalación limpia
-
 - Fecha: 23/10/2026.
 - Se clonó el repositorio en una carpeta nueva.
 - Se creó un entorno virtual desde cero.
