@@ -25,3 +25,80 @@ Estos pasos se completan de forma progresiva a lo largo de la Unidad U1.2, no to
 - Ningún secreto (contraseña, llave de API, token) va escrito directamente en el código ni en ningún archivo que se suba al repositorio.
 - Cada proyecto nuevo tiene su propio entorno virtual: no se comparten dependencias entre proyectos distintos.
 - Todo el trabajo que se entrega en este programa vive en un repositorio de GitHub, sin excepción.
+
+
+# ProjectPulse — Miniaplicación de seguimiento de proyectos con IA Generativa
+ProjectPulse es una miniaplicación desarrollada durante la Especialización en Desarrollo con IA Generativa. Su objetivo es analizar información de seguimiento de proyectos e identificar compromisos, alertas, pendientes y estado general utilizando la API de Gemini.
+
+## Instalación y ejecución
+
+### 1. Clonar el repositorio
+
+```bash
+git clone https://github.com/cmartcaico-qui/Proyecto-IA.git
+cd Proyecto-IA
+```
+
+### 2. Crear y activar un entorno virtual
+
+En Windows con Git Bash:
+
+```bash
+python -m venv .venv
+source .venv/Scripts/activate
+```
+
+### 3. Instalar las dependencias
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### 4. Configurar la API key de Gemini
+
+Copia el archivo de ejemplo:
+
+```bash
+cp .env.example .env
+```
+
+Luego abre `.env` y reemplaza:
+
+```text
+GEMINI_API_KEY=tu_llave_aqui
+```
+
+por tu API key real de Gemini.
+
+La clave real no debe subirse al repositorio.
+
+### 5. Ejecutar ProjectPulse
+
+Desde la raíz del proyecto:
+
+```bash
+cd src
+python consumir_gemini.py
+```
+
+### 6. Validar la consistencia del banco de prompts
+
+Desde la carpeta `src`:
+
+```bash
+python consistencia.py
+```
+
+Los resultados se guardan en:
+
+```text
+src/prompts/registro_resultados.json
+```
+
+## Registro del ensayo de instalación limpia
+
+Durante la preparación del Gate 1 se detectó que `python-dotenv` estaba instalado localmente, pero no estaba incluido inicialmente en `requirements.txt`.
+
+También se detectó que `.env.example` utilizaba `API_KEY`, mientras que el código esperaba `GEMINI_API_KEY`.
+
+Ambos puntos fueron corregidos antes de repetir el ensayo de instalación limpia.
