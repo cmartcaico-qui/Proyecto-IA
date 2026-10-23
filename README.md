@@ -102,3 +102,17 @@ Durante la preparación del Gate 1 se detectó que `python-dotenv` estaba instal
 También se detectó que `.env.example` utilizaba `API_KEY`, mientras que el código esperaba `GEMINI_API_KEY`.
 
 Ambos puntos fueron corregidos antes de repetir el ensayo de instalación limpia.
+
+## Registro del ensayo de instalación limpia
+
+- Fecha: 23/10/2026.
+- Se clonó el repositorio en una carpeta nueva.
+- Se creó un entorno virtual desde cero.
+- Se instalaron las dependencias únicamente desde `requirements.txt`.
+- Se configuró `.env` a partir de `.env.example`.
+- Se ejecutó `src/consumir_gemini.py` correctamente contra la API real de Gemini.
+- Se ejecutó `src/consistencia.py` correctamente, obteniendo 3/3 respuestas válidas en los tres prompts del banco.
+- `git status` confirmó que `.env` no está siendo versionado.
+- Durante la preparación se corrigió la ausencia de `python-dotenv` en `requirements.txt` y se ajustó `.env.example` para usar `GEMINI_API_KEY`.
+
+Resultado final: el proyecto puede instalarse y ejecutarse desde cero siguiendo únicamente las instrucciones del repositorio.
