@@ -74,9 +74,18 @@ def enviar_peticion(url, body):
             raise RuntimeError("La solicitud a la API de Gemini ha excedido el tiempo de espera.")
     except requests.exceptions.RequestException:
         raise RuntimeError("Error al enviar la solicitud a la API de Gemini.")
-    
+
+    if respuesta.status_code in (401, 403):
+        raise ValueError("Credencial inválida o sin permisos para acceder a la API de Gemini. Verifica tu clave de API y los permisos asociados.")
+    if respuesta.status_code >=500:
+        raise TimeoutError("El proveedor no pudo procesar la solicitud. Intenta nuevamente más tarde.")
+    if respuesta.status_code == 429:
+        raise RuntimeError("Límite de solicitudes excedido. Intenta nuevamente más tarde.")
+
     if respuesta.status_code != 200:
-     raise RuntimeError(
+        segundos = respuesta.headers.get("Retry-After")
+        mensaje = f"Límite excedido. Reintentar en {segundos} segundos." if segundos else "Límite excedido. Reintentar más tarde."
+        raise RuntimeError(
         f"Error en la respuesta. Status Code: {respuesta.status_code}. "
         f"Detalle: {respuesta.text}"
     )
@@ -222,5 +231,5 @@ El informe debe entregarse el viernes.
 Carolina enviará los datos pendientes el miércoles.
 Existe riesgo de retraso porque falta validar la información con el cliente.
 """))
-    except (ValueError, RuntimeError) as error:
+    except (ValueError, RuntimeError, TimeoutError) as error:
         print(f"No se pudo completar la operación: {error}")
