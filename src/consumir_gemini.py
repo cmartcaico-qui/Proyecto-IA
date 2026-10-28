@@ -80,7 +80,7 @@ def enviar_peticion(url, body):
     if respuesta.status_code >=500:
         raise TimeoutError("El proveedor no pudo procesar la solicitud. Intenta nuevamente más tarde.")
     if respuesta.status_code == 429:
-        raise RuntimeError("Límite de solicitudes excedido. Intenta nuevamente más tarde.")
+        raise TimeoutError("Límite de solicitudes excedido. Intenta nuevamente más tarde.")
 
     if respuesta.status_code != 200:
         segundos = respuesta.headers.get("Retry-After")

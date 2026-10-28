@@ -18,12 +18,15 @@ def con_reintento(                                #función, intentos, espera_se
 			time.sleep(espera_segundos)             #time.sleep(cantidad_segundos)
 
 #cómo lo ejecuto?
-url, cuerpo = armar_peticion("Hola")
+def consultar_modelo(pregunta):
 
-respuesta = con_reintento(
-    lambda: enviar_peticion(url, cuerpo)             #lambda = "guarda esta acción para ejecutarla después"
-)
+	url, cuerpo = armar_peticion(pregunta)
 
-texto = extraer_texto(respuesta)
+	respuesta = con_reintento(
+		lambda: enviar_peticion(url, cuerpo)             #lambda = "guarda esta acción para ejecutarla después"
+	)
 
-print(texto)
+	texto = extraer_texto(respuesta)
+
+	return texto
+print(consultar_modelo("Hola"))
