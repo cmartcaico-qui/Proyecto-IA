@@ -42,15 +42,19 @@ def consultar_modelo(pregunta):
 
 	url, cuerpo = armar_peticion(pregunta)
 
-	respuesta = con_reintento(
-		lambda: enviar_peticion(url, cuerpo)             #lambda = "guarda esta acción para ejecutarla después"
-	)
+	try:
+		#lambda = "guarda esta acción para ejecutarla después"
+		respuesta = con_reintento(lambda: enviar_peticion(url, cuerpo))
+	except TimeoutError:
+		raise RuntimeError("El servicio no respondió tras varios intentos. Intenta más tarde.")
+	
 	registrar_costo(respuesta)
 
 	texto = extraer_texto(respuesta)
 
 	return texto
 
-print(consultar_modelo("Hola"))
-print(consultar_modelo("Cuéntame algo breve"))
-print(consultar_modelo("¿Cuál es la capital de la Región de Los Lagos?"))
+if __name__ == "__main__":
+    print(consultar_modelo("Hola"))
+    print(consultar_modelo("Cuéntame algo breve"))
+    print(consultar_modelo("¿Cuál es la capital de la Región de Los Lagos?"))
