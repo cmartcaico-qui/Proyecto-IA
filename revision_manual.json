@@ -1,0 +1,82 @@
+[
+  {
+    "consulta": "¿Para qué sirve identificar riesgos en un proyecto?",
+    "f1": 0.03711340206185568,
+    "correccion_factual": "si",
+    "completitud": "si",
+    "contradiccion": "no",
+    "nota": "La respuesta explica correctamente que identificar riesgos permite anticiparse a situaciones que podrían afectar el proyecto. El F1 es bajo principalmente porque la respuesta es mucho más extensa que la referencia y utiliza vocabulario adicional."
+  },
+  {
+    "consulta": "¿Qué significa que una tarea esté atrasada?",
+    "f1": 0.03809523809523809,
+    "correccion_factual": "si",
+    "completitud": "si",
+    "contradiccion": "no",
+    "nota": "La respuesta mantiene el significado de la referencia: una tarea atrasada es aquella que superó su plazo sin completarse. El puntaje bajo se relaciona con la extensión y las explicaciones adicionales de la respuesta."
+  },
+  {
+    "consulta": "¿Para qué sirve identificar compromisos en un acta de reunión?",
+    "f1": 0.038461538461538464,
+    "correccion_factual": "si",
+    "completitud": "si",
+    "contradiccion": "no",
+    "nota": "La respuesta identifica correctamente las acciones, responsables y fechas como elementos necesarios para el seguimiento de compromisos. Agrega explicaciones y ejemplos que disminuyen la coincidencia léxica."
+  },
+  {
+    "consulta": "¿Qué es el estado de un proyecto?",
+    "f1": 0.045801526717557245,
+    "correccion_factual": "si",
+    "completitud": "parcial",
+    "contradiccion": "no",
+    "nota": "La respuesta describe correctamente el estado como una fotografía actual del proyecto e incluye avance, riesgos y próximos pasos. Sin embargo, no desarrolla de forma tan directa los pendientes y compromisos principales mencionados en la referencia."
+  },
+  {
+    "consulta": "¿Qué es un responsable dentro de un proyecto?",
+    "f1": 0.04597701149425287,
+    "correccion_factual": "si",
+    "completitud": "si",
+    "contradiccion": "no",
+    "nota": "La respuesta coincide conceptualmente con la referencia y explica que el responsable responde por la ejecución, avance o supervisión de una tarea. El F1 bajo se debe a que la respuesta agrega mucho contenido sobre funciones y matriz RACI."
+  },
+  {
+    "consulta": "¿Qué representa el color verde en un semáforo de proyecto?",
+    "f1": 0.11618257261410786,
+    "correccion_factual": "si",
+    "completitud": "si",
+    "contradiccion": "no",
+    "nota": "La respuesta coincide claramente con la referencia: el verde indica que el proyecto avanza según lo planificado y sin desviaciones críticas. Es el F1 más alto de la muestra."
+  },
+  {
+    "consulta": "¿Qué es un semáforo de proyecto?",
+    "f1": 0.07424593967517401,
+    "correccion_factual": "si",
+    "completitud": "si",
+    "contradiccion": "no",
+    "nota": "La respuesta explica correctamente el uso de verde, amarillo y rojo para representar el estado o nivel de riesgo de un proyecto. También agrega criterios y ejemplos no presentes en la referencia."
+  },
+  {
+    "consulta": "¿Qué es un riesgo en la gestión de proyectos?",
+    "f1": 0.07349081364829396,
+    "correccion_factual": "si",
+    "completitud": "si",
+    "contradiccion": "no",
+    "nota": "La respuesta conserva el significado central de la referencia: un riesgo es una situación incierta que puede afectar los objetivos del proyecto. La respuesta amplía además probabilidad, impacto y mitigación."
+  },
+  {
+    "consulta": "¿Qué es un hito de proyecto?",
+    "f1": 0.072992700729927,
+    "correccion_factual": "si",
+    "completitud": "si",
+    "contradiccion": "no",
+    "nota": "La respuesta describe correctamente un hito como un punto o evento relevante que representa un avance importante en el proyecto. La información adicional no contradice la referencia."
+  },
+  {
+    "consulta": "¿Qué representa el color rojo en un semáforo de proyecto?",
+    "f1": 0.07253886010362695,
+    "correccion_factual": "si",
+    "completitud": "si",
+    "contradiccion": "no",
+    "nota": "La respuesta coincide con la referencia al asociar el rojo con situaciones críticas, retrasos o riesgos que requieren intervención inmediata. El contenido adicional amplía el concepto sin contradecirlo."
+  }
+]
