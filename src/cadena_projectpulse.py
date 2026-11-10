@@ -22,17 +22,34 @@ def construir_cadena(modelo):
 
 
     # PASO 2: Detectar riesgos y pendientes
-
+    
     plantilla_riesgos = PromptTemplate.from_template(
-        "Analiza los siguientes compromisos de un proyecto. "
-        "Identifica posibles riesgos, tareas pendientes y situaciones "
-        "que podrían afectar el cumplimiento de los compromisos. "
-        "Utiliza solamente la información proporcionada. "
-        "Si no hay evidencia de un riesgo, indícalo. "
-        "Responde en lenguaje sencillo.\n\n"
-        "{compromisos}"
-    )
+        "Eres el analista de riesgos de ProjectPulse.\n\n"
 
+        "Analiza los siguientes compromisos y situaciones "
+        "informadas en un proyecto.\n\n"
+
+        "REGLAS OBLIGATORIAS:\n"
+        "1. Identifica únicamente riesgos respaldados "
+        "explícitamente por la información.\n"
+        "2. Diferencia compromisos, pendientes y riesgos.\n"
+        "3. Una tarea pendiente no es automáticamente un riesgo.\n"
+        "4. No inventes dependencias entre personas, "
+        "tareas o fechas.\n"
+        "5. No afirmes que un retraso es inevitable "
+        "cuando el texto solo indica que es posible.\n"
+        "6. No supongas que un plazo es ajustado "
+        "solo porque está próximo a otra fecha.\n"
+        "7. Si no existen riesgos respaldados, indícalo.\n\n"
+
+        "Identifica:\n"
+        "- Compromisos y responsables.\n"
+        "- Tareas pendientes.\n"
+        "- Riesgos respaldados y su evidencia.\n"
+        "- Información que no se puede confirmar.\n\n"
+
+        "INFORMACIÓN DEL PROYECTO:\n{compromisos}"
+    )
     paso_riesgos = plantilla_riesgos | modelo | StrOutputParser()
 
 
@@ -50,6 +67,11 @@ def construir_cadena(modelo):
         "Utiliza un lenguaje claro y directo.\n\n"
         "No generes alertas basadas en suposiciones o dependencias "
         "que no estén explícitamente respaldadas por el texto.\n\n"
+        "No conviertas riesgos posibles en problemas confirmados.\n"
+        "No afirmes que una tarea bloquea otra sin evidencia explícita.\n"
+        "No consideres los plazos cercanos como un riesgo por sí mismos.\n"
+        "Si el análisis anterior incluye una interpretación "
+        "sin evidencia, no la presentes como un hecho.\n\n"
         "{analisis}"
     )
 
