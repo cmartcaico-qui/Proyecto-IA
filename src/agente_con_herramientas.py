@@ -72,7 +72,7 @@ ejecutor_agente = AgentExecutor(
 )
 
 resultado = ejecutor_agente.invoke(
-    {"entrada": "¿Cuánto es 343+219?"}
+    {"entrada": "¿Qué es LangChain?"}
 )
 
 print("Respuesta Final:", resultado["output"][0]["text"])
