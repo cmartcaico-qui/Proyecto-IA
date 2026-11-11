@@ -36,8 +36,7 @@ ProjectPulse es una miniaplicación desarrollada durante la Especialización en 
 
 ```bash
 git clone https://github.com/cmartcaico-qui/Proyecto-IA.git
-cd Proyecto-IA
-```
+cd Proyecto-IA/plantilla-repositorio-base
 
 ### 2. Crear y activar un entorno virtual
 
@@ -114,3 +113,83 @@ Ambos puntos fueron corregidos antes de repetir el ensayo de instalación limpia
 - Durante la preparación se corrigió la ausencia de `python-dotenv` en `requirements.txt` y se ajustó `.env.example` para usar `GEMINI_API_KEY`.
 
 Resultado final: el proyecto puede instalarse y ejecutarse desde cero siguiendo únicamente las instrucciones del repositorio.
+
+## Documentación técnica de ProjectPulse
+
+El desarrollo de ProjectPulse contempla documentación técnica que permite registrar las decisiones de arquitectura, los criterios de evaluación del modelo y los límites de autonomía de los agentes de inteligencia artificial.
+
+### Documentos disponibles
+
+- [Decisiones de arquitectura](docs/decision-arquitectura.md): definición de la arquitectura y decisiones técnicas del proyecto.
+- [Límites de evaluación y métricas](docs/limites_metrica.md): criterios utilizados para evaluar los resultados del procesamiento de información.
+- [Límites de autonomía de ProjectPulse](docs/limites_autonomia_projectpulse.md): clasificación de riesgos, supervisión humana, revisión de trazas y procedimientos ante comportamientos inesperados.
+
+
+### Avance — Agentes, herramientas y memoria (Unidad 2.4)
+
+ProjectPulse cuenta con un agente desarrollado
+mediante LangChain y Gemini, que reutiliza
+las cadenas y mecanismos de orquestación
+construidos previamente.
+
+El agente permite:
+
+- Analizar textos de seguimiento de proyectos.
+- Identificar compromisos y responsables.
+- Identificar pendientes y posibles riesgos.
+- Mantener memoria temporal entre consultas.
+- Validar argumentos de herramientas con Pydantic.
+- Preparar propuestas simuladas de actualización.
+- Solicitar aprobación o rechazo humano en consola.
+- Registrar decisiones y acciones en archivos JSONL.
+
+Las actualizaciones y aprobaciones son simuladas:
+no se modifican documentos ni se envían
+comunicaciones externas.
+
+#### Ejecutar el agente
+
+Desde la carpeta `src`:
+
+```bash
+python agente_projectpulse.py
+```
+
+El programa utiliza un texto de prueba y permite
+comprobar las herramientas, la memoria, la
+validación de argumentos y la supervisión humana.
+
+#### Ejecutar pruebas automáticas
+
+Desde `src`:
+
+```bash
+python -m pytest test_cadena_projectpulse.py test_orquestacion_projectpulse.py test_agente_projectpulse.py -v
+```
+
+Último resultado verificado: **13 pruebas aprobadas**,
+con una advertencia de obsolescencia de LangChain.
+
+#### Trazabilidad
+
+Los registros locales se guardan en:
+
+`src/trazas_projectpulse.jsonl`
+
+Este archivo se encuentra excluido de Git mediante
+`.gitignore`, ya que podría contener información
+sensible en futuras ejecuciones.
+
+#### Limitaciones
+
+ProjectPulse todavía no incluye integración
+operativa con Google Workspace, modificaciones
+reales del seguimiento, envío automático de alertas
+ni semáforos funcionales.
+
+Las respuestas generadas deben verificarse
+contra la documentación original.
+
+Para conocer los controles y restricciones
+del agente, consultar
+[Límites de autonomía de ProjectPulse](docs/limites_autonomia_projectpulse.md).
