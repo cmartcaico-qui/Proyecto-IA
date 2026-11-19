@@ -24,3 +24,8 @@ Thumbs.db
 # Trazas y registros locales de ProjectPulse
 trazas_projectpulse.jsonl
 trazas_agente.jsonl
+
+# Bases vectoriales de Chroma
+chroma_db/
+vectorstore_*/
+chroma.sqlite3

@@ -1,0 +1,16 @@
+Fecha: 2026-11-18
+Configuración: k=5, chunk_size=200, chunk_overlap=30
+
+Precisión: 0.60 | Recall: 1.00 | F1: 0.75 | ¿Cuáles son los errores de credenciales inválidas?
+Precisión: 0.40 | Recall: 1.00 | F1: 0.57 | ¿Cuántos reintentos realiza el cliente ante un fallo de conexión?
+Precisión: 0.40 | Recall: 0.67 | F1: 0.50 | ¿Qué ocurre cuando se supera el límite de peticiones?
+Precisión: 0.20 | Recall: 1.00 | F1: 0.33 | ¿Cuántos créditos consume una operación de escritura?
+Precisión: 0.20 | Recall: 1.00 | F1: 0.33 | ¿Qué sucede cuando se agotan los tres intentos de conexión?
+Precisión: 0.20 | Recall: 1.00 | F1: 0.33 | ¿Cuántos segundos espera el cliente en cada reintento?
+Precisión: 0.20 | Recall: 1.00 | F1: 0.33 | ¿Qué debe verificarse si la API Key es inválida o el token ha expirado?
+Precisión: 0.20 | Recall: 1.00 | F1: 0.33 | ¿Qué ocurre cuando se ejecuta el método client.close()?
+
+Promedios:
+Precisión: 0.300
+Recall: 0.958
+F1: 0.436
