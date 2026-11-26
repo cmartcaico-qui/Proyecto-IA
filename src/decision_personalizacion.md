@@ -10,17 +10,22 @@ Esta necesidad debe resolverse para avanzar hacia la generación de alertas, sem
 
 Apliqué las cinco preguntas del método de decisión a la situación actual de ProjectPulse.
 
-- **RAG: 2 puntos.**
+- **RAG: 5 puntos.**
 - **PEFT: 1 punto.**
 - **Fine-tuning completo: 0 puntos.**
 
-La técnica mejor puntuada fue **RAG**.
+La técnica mejor puntuada fue **RAG**, sin empate.
 
 ### Justificación de las cinco respuestas
 
-1. **Información que cambia frecuentemente: False.** Aunque ProjectPulse necesita trabajar con información que puede actualizarse, todavía no he comprobado la frecuencia de modificación de las fuentes durante los últimos tres meses. Por lo tanto, utilizo False de manera provisional.
+1. **Información que cambia frecuentemente: True.** Revisé documentación del Liceo Vate Vicente Huidobro correspondiente a septiembre, octubre y noviembre de 2026. En septiembre, el acta de seguimiento del 08/09 registra acuerdos sobre certificación, preparación de estudiantes y coordinación de Elevatech. En octubre, el acta del 06/10 incorpora nuevos antecedentes de estudiantes y confirma actividades del proceso de certificación. En noviembre, se generaron y actualizaron documentos de cierre y certificación. Esto evidencia que el conjunto de información que ProjectPulse necesita consultar incorpora antecedentes nuevos mensualmente, aunque no significa que cada archivo individual se modifique todos los meses.
+**Fuentes revisadas:**
 
-2. **Problemas de formato o tono: False.** Todavía no he evaluado una muestra de 20 respuestas utilizando una pauta fija para comprobar si al menos 3 presentan problemas de formato o tono. Este criterio permanece pendiente de validación.
+- [Acta de seguimiento LVVH – 08/09/2026](https://docs.google.com/document/d/1852BVVg0xn7MMRQQ1gw5RCfgbqk9XfZlcSnnefdpOSg/edit)
+- [Acta de seguimiento LVVH – 06/10/2026](https://docs.google.com/document/d/1ybqEENuur-G461K2m3InPii97NUoJH3WLLlpOJAcAk0/edit)
+- [Listado de estudiantes para certificación – noviembre 2026](https://docs.google.com/spreadsheets/d/1bhjzjrxC9Q6pDczKRvjTl28S3tZlBYYE/edit)
+
+2. **Problemas de formato o tono: False.** Realicé una evaluación de **20 respuestas reales de Gemini (`gemini-3.1-flash-lite`)**, utilizando situaciones ficticias de seguimiento de proyectos: 7 consultas de extracción de compromisos, 7 de detección de alertas y 6 de generación de estados. Las 20 respuestas cumplieron la estructura JSON esperada, sin errores de formato (**0 de 20; 0 %**). Adicionalmente, la revisión manual no identificó incumplimientos del tono profesional, la claridad o la consistencia de redacción. Por lo tanto, no se alcanza el umbral de 3 incumplimientos en 20 respuestas (15 %) establecido en la actividad. Los resultados están registrados en `evaluacion_formato_projectpulse.jsonl`. Se observaron oportunidades de mejora en la interpretación de la gravedad de ciertos riesgos, que corresponden a precisión del contenido y no a errores de estructura.
 
 3. **Dataset grande y de calidad: False.** Actualmente tengo 10 ejemplos etiquetados de ProjectPulse en `dataset_tuning.py`, distribuidos entre compromisos, pendientes y alertas. No alcanzo los 200 ejemplos utilizados como referencia en el ejercicio.
 
@@ -30,9 +35,9 @@ La técnica mejor puntuada fue **RAG**.
 
 ### Análisis de sensibilidad
 
-Al cambiar únicamente `informacion_cambia_seguido` de False a True, RAG aumenta de 2 a 5 puntos, mientras PEFT mantiene 1 punto y fine-tuning completo 0 puntos.
+Al cambiar únicamente `informacion_cambia_seguido` de True a False, RAG disminuye de 5 a 2 puntos, mientras PEFT mantiene 1 punto y fine-tuning completo 0 puntos.
 
-RAG continúa siendo la técnica mejor puntuada. Este segundo resultado es hipotético, porque todavía falta verificar la frecuencia mensual de actualización documental.
+RAG continúa siendo la técnica mejor puntuada. Esto permite comprobar que la elección no depende exclusivamente del criterio de actualización mensual, sino también de la necesidad de incorporar cambios rápidamente sin entrenar nuevamente el modelo.
 
 ## 3. Técnica elegida y por qué
 
@@ -42,7 +47,7 @@ Actualmente desarrollé un laboratorio RAG utilizando Chroma y Gemini, con recup
 
 No elijo **fine-tuning completo** porque actualmente cuento con 10 ejemplos de práctica, una cantidad inferior a los 200 ejemplos utilizados como referencia en el curso. Además, entrenar el modelo no resolvería directamente la necesidad de consultar información documental actualizada.
 
-**PEFT** podría utilizarse posteriormente si las evaluaciones demostraran dificultades recurrentes en la consistencia del formato o de las clasificaciones. Permitiría ajustar el comportamiento entrenando una cantidad reducida de parámetros, pero actualmente no existe evidencia suficiente para justificar ese entrenamiento.
+**PEFT** podría utilizarse posteriormente si las evaluaciones demostraran dificultades recurrentes en la consistencia del formato o de las clasificaciones. La evaluación reciente de 20 respuestas no identificó incumplimientos de formato o tono que justifiquen priorizarlo actualmente. PEFT permitiría ajustar el comportamiento entrenando una cantidad reducida de parámetros, pero por ahora no existe evidencia suficiente para justificar ese entrenamiento.
 
 RAG resulta más adecuado para la necesidad evaluada porque aprovecha los componentes que ya desarrollé y evita incorporar un proceso de entrenamiento que requiere preparación de datos, recursos de cómputo y tiempo adicional.
 

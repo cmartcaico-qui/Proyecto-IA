@@ -22,7 +22,8 @@ print(problema)
 # que se haya demostrado que el problema no existe.
 
 respuestas_mi_caso = {
-    "informacion_cambia_seguido": False,
+#    "informacion_cambia_seguido": False,
+    "informacion_cambia_seguido": True,
     "problema_de_formato_o_tono": False,
     "dataset_grande_y_de_calidad": False,
     "presupuesto_limitado_o_iterar_rapido": True,
@@ -38,13 +39,17 @@ print("Técnicas candidatas:", ganadoras)
 # Paso 3: Análisis de sensibilidad
 
 variante = dict(respuestas_mi_caso)
-
+"""
 # Simular que confirmamos actualizaciones mensuales
 variante["informacion_cambia_seguido"] = True
+"""
+# Simular qué pasaría si la información NO cambiara mensualmente
+variante["informacion_cambia_seguido"] = False
 
 puntos_variante, ganadoras_variante = recomendar_estrategia(variante)
 
-print("\nEscenario con actualización mensual confirmada:")
+#print("\nEscenario con actualización mensual confirmada:")
+print("\nEscenario hipotético sin actualización mensual:")
 print("Puntajes:", puntos_variante)
 print("Técnicas candidatas:", ganadoras_variante)
 
