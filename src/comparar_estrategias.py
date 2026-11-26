@@ -36,55 +36,56 @@ def recomendar_estrategia(respuestas):
 
     return puntos, ganadoras
 
+if __name__ == "__main__":
 
-# Ejemplo de la clase: clasificador de errores
-respuestas_caso2 = {
-    "informacion_cambia_seguido": False,
-    "problema_de_formato_o_tono": True,
-    "dataset_grande_y_de_calidad": True,
-    "presupuesto_limitado_o_iterar_rapido": False,
-    "necesita_multiples_variantes": False
-}
+    # Ejemplo de la clase: clasificador de errores
+    respuestas_caso2 = {
+        "informacion_cambia_seguido": False,
+        "problema_de_formato_o_tono": True,
+        "dataset_grande_y_de_calidad": True,
+        "presupuesto_limitado_o_iterar_rapido": False,
+        "necesita_multiples_variantes": False
+    }
 
-puntos, ganadoras = recomendar_estrategia(respuestas_caso2)
+    puntos, ganadoras = recomendar_estrategia(respuestas_caso2)
 
-print("Puntajes:", puntos)
-print("Técnicas recomendadas:", ganadoras)
+    print("Puntajes:", puntos)
+    print("Técnicas recomendadas:", ganadoras)
 
-# Análisis de sensibilidad: cambiar una respuesta a la vez
+    # Análisis de sensibilidad: cambiar una respuesta a la vez
 
-print("\nAnálisis de sensibilidad:")
+    print("\nAnálisis de sensibilidad:")
 
-for clave in respuestas_caso2:
-    variante = dict(respuestas_caso2)
+    for clave in respuestas_caso2:
+        variante = dict(respuestas_caso2)
 
-    # Invertir solo una respuesta
-    variante[clave] = not variante[clave]
+        # Invertir solo una respuesta
+        variante[clave] = not variante[clave]
 
-    # Recalcular los puntajes
-    puntos_v, ganadoras_v = recomendar_estrategia(variante)
+        # Recalcular los puntajes
+        puntos_v, ganadoras_v = recomendar_estrategia(variante)
 
-    # Comprobar si cambian las técnicas recomendadas
-    cambio = "CAMBIA" if set(ganadoras_v) != set(ganadoras) else "igual"
+        # Comprobar si cambian las técnicas recomendadas
+        cambio = "CAMBIA" if set(ganadoras_v) != set(ganadoras) else "igual"
 
-    print(
-        f"{clave} -> {variante[clave]}: "
-        f"{ganadoras_v} [{cambio}]"
-    )
+        print(
+            f"{clave} -> {variante[clave]}: "
+            f"{ganadoras_v} [{cambio}]"
+        )
 
-# Segundo caso: bot de atención al cliente
+    # Segundo caso: bot de atención al cliente
 
-respuestas_caso1 = {
-    "informacion_cambia_seguido": True,
-    "problema_de_formato_o_tono": True,
-    "dataset_grande_y_de_calidad": False,
-    "presupuesto_limitado_o_iterar_rapido": True,
-    "necesita_multiples_variantes": False,
-}
+    respuestas_caso1 = {
+        "informacion_cambia_seguido": True,
+        "problema_de_formato_o_tono": True,
+        "dataset_grande_y_de_calidad": False,
+        "presupuesto_limitado_o_iterar_rapido": True,
+        "necesita_multiples_variantes": False,
+    }
 
-puntos1, ganadoras1 = recomendar_estrategia(respuestas_caso1)
+    puntos1, ganadoras1 = recomendar_estrategia(respuestas_caso1)
 
-print("\nSegundo caso:")
-print("Puntajes:", puntos1)
-print("Técnicas recomendadas:", ganadoras1)
+    print("\nSegundo caso:")
+    print("Puntajes:", puntos1)
+    print("Técnicas recomendadas:", ganadoras1)
 
