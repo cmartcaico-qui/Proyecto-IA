@@ -29,3 +29,11 @@ trazas_agente.jsonl
 chroma_db/
 vectorstore_*/
 chroma.sqlite3
+
+# Logs y respaldos locales de ProjectPulse
+rag_logs.jsonl
+evaluacion_formato_projectpulse_respaldo.jsonl
+
+# Credenciales y configuraciones locales
+.env.*
+!.env.example
